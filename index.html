@@ -1,0 +1,259 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Windows Server Core</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="windows-server-core"
+                  title="Windows Server Core"
+                  environment="web"
+                  feedback-link="">
+    
+      <google-codelab-step label="Pourquoi installer Windows Server Core ?" duration="0">
+        <p>Lorsque l&#39;on installe Windows Server, deux options s&#39;offrent à nous : une installation complète comprenant l&#39;interface graphique, et une installation minimale – presque – sans interface graphique (core).</p>
+<p>Installer Windows Server en mode « core » ne signifie pas qu&#39;on pourra faire moins de choses avec son serveur. La base du système d&#39;exploitation reste identique, c&#39;est la manière de l&#39;utiliser qui va changer et se rapprocher un peu plus de l&#39;approche Linux, en manipulant la ligne de commande. PowerShell va devenir votre meilleur allié au quotidien et c&#39;est sûrement grâce à lui que Microsoft a pris la décision de créer une version de Windows Server sans interface graphique.</p>
+<p>Installer Windows Server Core présentera plusieurs avantages par rapport à une installation standard :</p>
+<p class="image-container"><img style="width: 576.00px" src="img\\b9ea6f1434ca0a23.png"></p>
+<h2 is-upgraded><strong>I. Système plus léger</strong></h2>
+<p>Une installation minimale de Windows Server étant une version complète avec des composants en moins, donc le système Windows est plus léger.</p>
+<p>En effet, d&#39;une part il n&#39;y a pas d&#39;interface graphique, mais cela implique également la suppression de tous les outils et logiciels installés de base et qui s&#39;appuient sur cette interface. À titre d&#39;exemple, on pourrait citer : Internet Explorer ou encore l&#39;Explorateur de fichier.</p>
+<p>Néanmoins, le rendu graphique reste présent puisqu&#39;il est possible d&#39;accéder à divers outils natifs de Windows : Bloc-Notes, l&#39;éditeur de registre, ou encore certains panneaux de configuration.</p>
+<h2 is-upgraded><strong>II. Économie des ressources</strong></h2>
+<p>Moins de services signifient moins de processus, et donc moins de ressources consommées. Ainsi, deux éléments de votre serveur seront les premiers satisfaits : la mémoire vive (RAM) et le disque dur.</p>
+<h2 is-upgraded><strong>III. Réduction de la surface d&#39;attaque</strong></h2>
+<p>La surface d&#39;attaque représente tous les points d&#39;entrées possibles sur votre serveur, c&#39;est-à-dire qui peuvent être potentiellement utilisés par un attaquant pour compromettre votre serveur. Grâce à une installation en mode core, la surface d&#39;attaque logicielle sera réduite puisqu&#39;il y a moins de composants d&#39;installer, donc moins de points d&#39;entrées.</p>
+<p>À titre d&#39;exemple, des vulnérabilités sont découvertes régulièrement au sein du navigateur Internet Explorer, comme il n&#39;est pas installé lors d&#39;une installation core, vous n&#39;êtes pas concerné. De ce fait, la surface d&#39;attaque est réduite.</p>
+<h2 is-upgraded><strong>IV. Comment gérer un serveur sans interface graphique ?</strong></h2>
+<p>Au sein de ce cours, nous allons apprendre à gérer un serveur Windows sans interface graphique, mais alors qu&#39;allons-nous utiliser ?</p>
+<p>- SCONFIG : Un utilitaire intégré à Windows Server Core et qui permet d&#39;effectuer des actions de configuration basiques.</p>
+<p>- PowerShell : La console PowerShell sera votre meilleur allié pour gérer votre serveur en ligne de commande, un incontournable</p>
+<p>- La gestion à distance : Les outils d&#39;administration Windows permettent de gérer un serveur à distance, notamment grâce à la console MMC.</p>
+<p>- Outils tiers</p>
+<h2 is-upgraded><strong>VI. Conclusion</strong></h2>
+<p>Les serveurs Windows Core sont principalement utilisés en tant qu&#39;hyperviseur Hyper-V (virtualisation), en tant que contrôleur de domaine (voir même RODC dans une succursale), mais aussi en tant que serveurs de fichiers ou d&#39;impression.</p>
+<ol type="1" start="1">
+<li>Quels sont les 3 avantages de Windows Server Core par rapport à une installation standard ?</li>
+<li>Pourquoi Windows Server Core est un système plus léger ?</li>
+<li>Est-ce que Windows Server Core est totalement dépourvu de rendu graphique ?</li>
+<li>Quels sont les 2 éléments sur lesquels Windows Server Core permet de faire des économies de ressources ?</li>
+<li>Sur un ordinateur, on sauvegarde un fichier sur une mémoire RAM. Puis on décide d&#39;éteindre et de rallumer l&#39;ordinateur. Le fichier sera-t-il toujours présent ? Quel type de mémoire permet de conserver un fichier sur le long terme ?</li>
+<li>Pourquoi la surface d&#39;attaque est réduite avec Windows Server Core comparé à une installation standard ?</li>
+<li>Quels outils permettent de gérer un serveur Windows sans interface graphique ?</li>
+<li>Pour quels besoins les serveurs Windows Core sont-ils principalement utilisés ?</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Installer Windows Server en mode « core »" duration="0">
+        <h2 is-upgraded><strong>Installer Windows Server 2022 en mode Core</strong></h2>
+<p>Ouvrir VirtualBox et créer une nouvelle machine virtuelle avec la configuration ci-dessous : </p>
+<ul>
+<li><strong>Nom : </strong>TP BRUNO Windows Server</li>
+<li><strong>Type :</strong> Windows</li>
+<li><strong>Version :</strong> Windows 2019 (64bits)</li>
+<li><strong>Taille de la mémoire :</strong> 8Go</li>
+</ul>
+<p><strong>Disque dur : </strong></p>
+<ul>
+<li><strong>Cochez :</strong> Créer un disque virtuel maintenant</li>
+<li><strong>Type de fichier :</strong> VDI (Image Disque VirtualBox)</li>
+<li><strong>Stockage :</strong> Dynamiquement alloué</li>
+<li><strong>Taille du disque dur virtuel :</strong> 20 Go</li>
+</ul>
+<p><strong>Configuration (Menu : Machine -&gt; Configuration) : </strong></p>
+<ul>
+<li><strong>Système -&gt; Nombre de processeurs :</strong> 2</li>
+</ul>
+<p>Démarrer la machine virtuelle puis sélectionnez l&#39;emplacement de l&#39;ISO Windows Server Core.</p>
+<p>Choisissez ensuite votre langue et votre type de clavier, normalement « Français » puis cliquez sur « Suivant ».</p>
+<p class="image-container"><img style="width: 580.00px" src="img\\41e07b47312491c0.png"></p>
+<p>A l&#39;étape suivante, cliquez sur « Installer maintenant » pour démarrer le processus d&#39;installation, et, patientez quelques instants pendant le démarrage.</p>
+<p class="image-container"><img style="width: 624.00px" src="img\\3b0a242cf1c5f828.png"></p>
+<p>Vous devez choisir le système d&#39;exploitation à installer, alors vous devez sélectionner une version où il n&#39;est pas précisé &#34;Expérience de bureau&#34; car cela signifie &#34;avec interface graphique&#34;.</p>
+<p class="image-container"><img style="width: 602.00px" src="img\\2e6a6f1dd057d589.png"></p>
+<p>Acceptez les termes du contrat de licence puis continuez.</p>
+<p class="image-container"><img style="width: 624.00px" src="img\\b7aacfe81e30e92f.png"></p>
+<p>Choisissez le second choix c&#39;est-à-dire « Personnalisé » puisque nous faisons une installation complète et non une mise à niveau de Windows.</p>
+<p class="image-container"><img style="width: 624.00px" src="img\\9074f6d8e60c4ff9.png"></p>
+<p>Sélectionnez le disque dur où vous souhaitez installer Windows et cliquez sur « Suivant ».</p>
+<p class="image-container"><img style="width: 624.00px" src="img\\c2db5f3b6b97eff9.png"></p>
+<p>Une fois l&#39;installation des fichiers et la préparation du système effectuées, vous arriverez sur cette page : </p>
+<p class="image-container"><img style="width: 624.00px" src="img\\745664f292f5406a.png"></p>
+<p>Pour faire la conbinaison CTRL+Alt+Suppr avec VirtualBox il faut utiliser les touches CTRL droit+Suppr ou utiliser le menu : </p>
+<p class="image-container"><img style="width: 624.00px" src="img\\764ffa33de6a7fa9.png"></p>
+<p>Windows vous demande de changer le mot de passe du compte Administrateur local. Appuyez sur &#34;Entrée&#34; sur votre clavier pour valider la commande &#34;OK&#34; et définir un mot de passe. </p>
+<p class="image-container"><img style="width: 624.00px" src="img\\9b30f8f79ff65591.png"></p>
+<p>Ensuite, vous devez saisir deux fois le mot de passe. <strong>Attention le pavé numérique est par défaut désactivé !</strong></p>
+<p>Pour passer de la ligne &#34;Nouveau mot de passe&#34; à la ligne &#34;Confirmer le mot de passe&#34;, utilisez la touche &#34;TAB&#34; (ou la flèche directionnelle vers le bas).</p>
+<p class="image-container"><img style="width: 624.00px" src="img\\a8fdbe839e2c22ce.png"></p>
+<p>Ensuite, vous accédez à l&#39;outil de configuration de Windows Server en mode Core : &#34;SConfig&#34;. </p>
+<ol type="1" start="9">
+<li>Quel nombre faut-il saisir pour sélectionner PowerShell ?</li>
+</ol>
+<p>Taper ce nombre.</p>
+<p>Votre serveur sous Windows Server 2022 en mode Core est installé et prêt à être configuré !</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Configurer la date et l&#39;heure en PowerShell" duration="0">
+        <p>Sur Windows Server Core, il y a deux manières courantes pour configurer la date et l&#39;heure de notre serveur : l&#39;utilisation de l&#39;interface graphique et l&#39;utilisation de PowerShell. </p>
+<h2 is-upgraded><strong>I. Set-Date pour modifier la date et l&#39;heure avec PowerShell</strong></h2>
+<p>PowerShell intègre plusieurs commandes pour manipuler la date et l&#39;heure. Tout d&#39;abord, nous avons Get-Date pour récupérer la date et l&#39;heure, et puis il y a aussi la commande Set-Date pour modifier la date et l&#39;heure sur notre système.</p>
+<p>Pour utiliser cette commande, c&#39;est tout simple. On va utiliser le paramètre -Date et préciser la date et l&#39;heure souhaitée. Voici un exemple :</p>
+<p class="image-container"><img style="width: 624.00px" src="img\\93897f3653407781.png"></p>
+<ol type="1" start="10">
+<li>Quelle commande avez-vous utilisée pour configurer la date du jour ?</li>
+</ol>
+<h2 is-upgraded><strong>II. Le recours à timedate.cpl</strong></h2>
+<p>Il est possible d&#39;avoir quelques interfaces graphisque sous Windows Core en exécutant des fichiers &#34;.cpl&#34;.</p>
+<p>Pour ouvrir le panneau &#34;Date et heure&#34;, correspondant à &#34;timedate.cpl&#34;, il y a deux méthodes : soit avec la commande &#34;timedate.cpl&#34;, tout simplement, ou en effectuant le choix &#34;9&#34; lorsque l&#39;utilitaire SCONFIG est ouvert.</p>
+<p>Si vous passez par l&#39;invite de commande ou PowerShell, saisissez :</p>
+<pre>timedate.cpl</pre>
+<p>Vous obtiendrez le résultat suivant :</p>
+<p class="image-container"><img style="width: 624.00px" src="img\\8b605216aa7af6ad.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Modifier la résolution de l&#39;écran avec PowerShell" duration="0">
+        <p>La résolution d&#39;écran utilisée par Windows n&#39;est pas toujours optimale, c&#39;est pourquoi un ajustement peut être nécessaire. </p>
+<p>Pour changer la résolution d&#39;écran, nous utiliserons la commande Set-DisplayResolution. En fait, c&#39;est simple d&#39;utilisation puisqu&#39;il suffit de préciser la largeur et la hauteur de l&#39;écran qui définiront la résolution.</p>
+<p>Par exemple, si l&#39;on veut définir une résolution 1920×1080 :</p>
+<pre>Set-DisplayResolution -Width 1920 -Height 1080</pre>
+<p>ous serez invité à valider le changement de résolution, si vous souhaitez forcer la validation sans le faire manuellement, ajoutez l&#39;option « -force » à la commande indiquée ci-dessus.</p>
+<p class="image-container"><img style="width: 624.00px" src="img\\130591319ffd9ce7.png"></p>
+<p>Si vous souhaitez connaître la résolution actuelle de votre écran, utilisez cette commande :</p>
+<pre>Get-DisplayResolution</pre>
+<p>Cela vous retournera la résolution sous la forme &lt;largeur&gt;x&lt;hauteur&gt;.</p>
+<ol type="1" start="11">
+<li>Quelle est la résolution de votre écran ?</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Renommer Windows en ligne de commande" duration="0">
+        <p>Dans ce chapitre, nous allons voir différentes solutions pour renommer le serveur en ligne de commande : PowerShell; Suite à l&#39;installation, le serveur dispose d&#39;un nom générique sous la forme « WIN-XXXXXXXX ».</p>
+<p>Personnellement, je conseille l&#39;utilisation de la méthode PowerShell puisque c&#39;est une méthode qui fonctionnera sur tous les serveurs récents, et c&#39;est une solution qui a de l&#39;avenir. Pour le reste, « sconfig » est typique à Windows Core.</p>
+<p>De manière générale, concentrez-vous sur les commandes PowerShell tout en prenant en considération les alternatives. Des alternatives parfois plus simples et efficaces.</p>
+<h2 is-upgraded><strong>I. Renommer une machine Windows avec PowerShell</strong></h2>
+<p>Depuis PowerShell 3.0, il existe une commande toute simple pour renommer une machine Windows, grâce à l&#39;utilisation du commandlet « Rename-Computer ».</p>
+<p>Pour renommer le serveur avec Rename-Computer, il suffit de spécifier le paramètre -NewName, suivi du nom que l&#39;on souhaite. Par exemple, cela donne la commande suivante :</p>
+<pre>Rename-Computer -NewName &#34;CORE01&#34;</pre>
+<ol type="1" start="12">
+<li>Renommer votre machine Windows &#34;TP&#34;. Quelle commande avez-vous utilisée ?</li>
+</ol>
+<p>Enfin, on termine simplement avec une commande pour redémarrer le serveur. Là encore, nous avons une commande PowerShell à disposition :</p>
+<pre>Restart-Computer</pre>
+<p>Voici un exemple de sortie :</p>
+<p class="image-container"><img style="width: 624.00px" src="img\\76e8e4e335bcb153.png"></p>
+<p>Au redémarrage de la machine, on peut vérifier que le nom est changé grâce à la commande « hostname ».</p>
+<pre>hostname</pre>
+<h2 is-upgraded><strong>II. Modification du nom avec SCONFIG</strong></h2>
+<p>Il suffit de saisir la commande « sconfig » dans la console de Windows pour ouvrir cet utilitaire de configuration (qui se lance également au démarrage).</p>
+<p>Ensuite, vous devez faire le choix « 2 » pour changer le nom de l&#39;ordinateur. Une fois le choix effectué, saisissez le nouveau nom et appuyez sur Entrée, un message vous demandant de redémarrer l&#39;ordinateur pour appliquer la modification apparaîtra. Validez une nouvelle fois en saisissant &#34;O&#34; et en appuyant sur Entrée.</p>
+<p class="image-container"><img style="width: 624.00px" src="img\\c3670926693b754d.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Modifier le mot de passe « Administrateur »" duration="0">
+        <p>Il est fortement recommandé de modifier régulièrement les mots de passe des comptes utilisateur, notamment quand il s&#39;agit d&#39;un compte avec des privilèges élevés, comme c&#39;est le cas du compte &#34;Administrateur&#34;.</p>
+<h2 is-upgraded><strong>Modifier le mot de passe d&#39;un utilisateur avec PowerShell</strong></h2>
+<p>Depuis Windows PowerShell 5.1, Windows dispose des commandes nécessaires pour gérer les groupes et utilisateurs locaux avec PowerShell. Ces commandes permettent de créer des utilisateurs, des groupes, de gérer les membres des groupes, mais aussi de modifier les utilisateurs.</p>
+<p>La commande qui permet de modifier les utilisateurs (et donc de changer le mot de passe) se nomme &#34;Set-LocalUser&#34;. Avant cela, intéressons-nous à une autre commande : &#34;Get-LocalUser&#34;, qui permet de lister les utilisateurs locaux du serveur.</p>
+<pre>Get-LocalUser</pre>
+<p>Le compte &#34;Administrateur&#34; est bien présent, nous allons modifier son mot de passe.</p>
+<p>Pour définir un mot de passe, il faut utiliser une chaîne sécurisée, c&#39;est-à-dire une SecureString. Commençons par créer la chaîne sécurisée en stockant la valeur dans une variable nommée $NewPassword.</p>
+<pre>$NewPassword = Read-Host -AsSecureString</pre>
+<p>Lorsque vous allez exécuter cette commande, le prompt va changer de ligne : il sera en attente d&#39;une saisie donc c&#39;est à ce moment-là que vous devez saisir le mot de passe. En plus, il ne s&#39;affiche pas en clair dans la console. Lorsque la saisie est terminée, appuyez sur &#34;Entrée&#34;.</p>
+<p>Il ne reste plus qu&#39;à affecter ce nouveau mot de passe au compte &#34;Administrateur&#34;. Nous allons utiliser la commande Set-LocalUser avec deux paramètres : -Name et -Password. Ce qui donne :</p>
+<pre>Set-LocalUser -Name &#34;Administrateur&#34; -Password $NewPassword</pre>
+<p> Finalement on obitient : </p>
+<p class="image-container"><img style="width: 624.00px" src="img\\322c80b078360d66.png"></p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Renommer le compte Administrateur" duration="0">
+        <p>Dans ce chapitre, nous allons voir comment renommer le compte Administrateur de Windows Server Core à l&#39;aide de PowerShell. </p>
+<p>L&#39;une des meilleures pratiques lors de la configuration de base d&#39;un serveur, c&#39;est de renommer le compte Administrateur local intégré par défaut à Windows. Lorsqu&#39;une personne malintentionnée cherchera à s&#39;authentifier sur votre serveur, elle essaiera forcément le compte &#34;Administrateur&#34; puisque c&#39;est le compte de base. Si on change le nom, on renforce la sécurité de notre serveur : c&#39;est pour cette raison que cette étape de la configuration me semble importante.</p>
+<h2 is-upgraded><strong>Renommer un compte utilisateur avec PowerShell</strong></h2>
+<p>Comme pour le chapitre précédent, c&#39;est une commande du module &#34;LocalAccounts&#34; de Windows PowerShell 5.1 qui va nous rendre service. Cette fois-ci, nous n&#39;allons pas utiliser Set-LocalUser mais plutôt Rename-LocalUser. Il suffit de préciser le nom actuel de l&#39;utilisateur (-Name) et le nouveau nom (-NewName)</p>
+<pre>Rename-LocalUser -Name &#34;Administrateur&#34; -NewName &#34;Florian&#34;</pre>
+<p>Ensuite, si on liste les utilisateurs, on peut vérifier que le compte &#34;Administrateur&#34; est bien devenu &#34;Florian&#34;. Cette commande pourrait s&#39;appliquer à n&#39;importe quel autre utilisateur.</p>
+<p class="image-container"><img style="width: 624.00px" src="img\\b2163fe213f3b002.png"></p>
+<p>Suite à la modification du nom du compte Administrateur, il est préférable de redémarrer la machine avant d&#39;aller plus loin.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Créer un nouveau compte utilisateur local" duration="0">
+        <p>La création d&#39;utilisateurs locaux est également une tâche que l&#39;on a besoin de réaliser de temps à autre, notamment pour exécuter un service sous un utilisateur spécifique. De ce fait, il faut être capable de créer un utilisateur rapidement.</p>
+<p>En complément, il s&#39;avère utile d&#39;être capable de créer un groupe et d&#39;affecter l&#39;utilisateur à ce groupe local. Nous verrons comment procéder avec PowerShell, mais aussi avec les commandes NET USER et NET LOCALGROUP.</p>
+<p>Dans les deux cas, nous allons créer un utilisateur nommé &#34;IT-Connect&#34; et l&#39;ajouter à un nouveau groupe nommé &#34;Externes&#34;.</p>
+<h2 is-upgraded><strong>I. Créer un nouvel utilisateur avec PowerShell</strong></h2>
+<h3 is-upgraded><strong>A. Créer l&#39;utilisateur avec New-LocalUser</strong></h3>
+<p>La commande New-LocalUser permet de créer un nouveau compte utilisateur local avec PowerShell. Ce cmdlet accepte plusieurs paramètres, dont :</p>
+<ul>
+<li>Name : l&#39;identifiant de l&#39;utilisateur</li>
+<li>Description : la description du compte utilisateur</li>
+<li>Fullname : le nom complet de l&#39;utilisateur</li>
+<li>Disabled : compte désactivé</li>
+<li>PasswordNeverExpires : le mot de passe n&#39;expire jamais</li>
+<li>Password : le mot de passe du compte</li>
+</ul>
+<p>Nous allons utiliser seulement deux paramètres puisqu&#39;on le fait en mode interactif :</p>
+<pre>New-LocalUser -Name &#34;IT-Connect&#34; -Description &#34;Compte d&#39;administration pour IT-Connect&#34;</pre>
+<p>Vous remarquerez que l&#39;on n&#39;a pas spécifié de mot de passe. Ce n&#39;est pas grave car après avoir exécuté la commande, il vous sera demandé de saisir le mot de passe.</p>
+<p class="image-container"><img style="width: 624.00px" src="img\\d56edd494bf80665.png"></p>
+<p>L&#39;utilisateur est créé ; vous pouvez le vérifier avec la commande Get-LocalUser.</p>
+<h3 is-upgraded><strong>B. Créer un groupe local avec New-LocalGroup</strong></h3>
+<p>Passons maintenant à la création de notre groupe avec le cmdlet New-LocalGroup. Il suffit de préciser le nom du groupe, et éventuellement, une description (-Description).</p>
+<pre>New-LocalGroup -Name &#34;Externes&#34;</pre>
+<p>Ensuite, si on liste les groupes, on peut voir qu&#39;il est bien créé :</p>
+<pre>Get-LocalGroup</pre>
+<p class="image-container"><img style="width: 624.00px" src="img\\a8f1a241af95817d.png"></p>
+<h3 is-upgraded><strong>C. Ajouter l&#39;utilisateur à un groupe local avec Add-LocalGroupMember</strong></h3>
+<p>Nous avons l&#39;utilisateur et le groupe, il ne reste plus qu&#39;à ajouter l&#39;utilisateur dans le groupe avec le cmdlet Add-LocalGroupMember. Ce cmdlet est simple à utiliser puisqu&#39;il n&#39;y a qu&#39;à préciser le nom du groupe (-Group) et l&#39;utilisateur à ajouter (-Member).</p>
+<pre>Add-LocalGroupMember -Group &#34;Externes&#34; -Member &#34;TP\IT-Connect&#34;</pre>
+<p>Petite subtilité au moment de préciser le nom de l&#39;utilisateur : il faut préciser &#34;TP&#34; en préfixe, c&#39;est-à-dire le nom du serveur pour indiquer que c&#39;est un compte local. </p>
+<p>Enfin, la commande &#34;Get-LocalGroupMember&#34; permet de lister les membres du groupe et valider ce que l&#39;on vient de faire.</p>
+<h2 is-upgraded><strong>II. Le cas SCONFIG</strong></h2>
+<p>Il est à noter que SCONFIG intègre une option qui permet d&#39;ajouter rapidement un utilisateur au groupe « Administrateur local » que ce soit un utilisateur du domaine ou local. Il suffit de lancer SCONFIG et de choisir l&#39;option « 3 ».</p>
+<p>Attention tout de même, il faut écrire la valeur sous la forme « DOMAINE\Utilisateur » pour les utilisateurs de domaine.</p>
+<p class="image-container"><img style="width: 624.00px" src="img\\935a6d2db1ef2eb1.png"></p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
